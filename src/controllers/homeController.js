@@ -28,6 +28,26 @@ module.exports = {
         return res.render('displayCRUD.ejs', {
             users: data
         })
+    },
+    getUpdateCRUD: async (req, res) => {
+        let userId = req.query.id;
+        if (userId) {
+            let userData = await CRUDservice.getUserInfoById(userId);
+
+            return res.render('updateCRUD.ejs', {
+                user: userData
+            })
+        } else {
+            return res.send("User not found!")
+
+        }
+    },
+    putCRUD: async (req, res) => {
+        let data = req.body;
+        let allUsers = await CRUDservice.updateUserData(data);
+        return res.render('displayCRUD.ejs', {
+            users: allUsers
+        })
     }
 }
 

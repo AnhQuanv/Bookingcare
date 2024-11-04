@@ -25,6 +25,8 @@
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
                     <th scope="col">Address</th>
+                    <th scope="col">Actions</th>
+
                     <!-- <th scope="col">Phone Number</th>
                     <th scope="col">Gender</th>
                     <th scope="col">Role</th> -->
@@ -47,6 +49,16 @@
                         </td>
                         <td>
                             <%= user.address %>
+                        </td>
+
+                        <td>
+                            <a href="/update-crud?id=<%= user.id %>">
+                                <button class="btn btn-primary" type="button">Update</button>
+                            </a>
+                            <a href="/delete-crud?id=<%= user.id %>"
+                                onclick="return confirm('Are you sure you want to delete this user?');">
+                                <button class="btn btn-warning" type="button">Delete</button>
+                            </a>
                         </td>
                     </tr>
                     <% }); %>

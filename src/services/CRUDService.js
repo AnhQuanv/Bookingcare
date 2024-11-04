@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import db from '../models/index'
+import { ppid } from 'process';
 
 
 module.exports = {
@@ -23,13 +24,50 @@ module.exports = {
             }
         })
     },
-    getAllUser: async () => {
+    getAllUser: () => {
         return new Promise(async (resolve, reject) => {
             try {
                 let users = db.User.findAll({ raw: true });
                 resolve(users);
             } catch (error) {
                 reject(error)
+            }
+        })
+    },
+    getUserInfoById: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let user = await db.User.findOne({
+                    where: { id: userId },
+                    raw: true,
+                })
+                if (user) {
+                    resolve(user);
+                } else {
+                    resolve({});
+                }
+            } catch (error) {
+                reject(error)
+            }
+        })
+    },
+    updateUserData: (data) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await db.User.update(
+                    {
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        address: data.address,
+                    },
+                    {
+                        where: { id: data.id }
+                    }
+                );
+                let allUsers = await db.User.findAll();
+                resolve(allUsers);
+            } catch (error) {
+                reject(error);
             }
         })
     }
