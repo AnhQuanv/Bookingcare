@@ -21,6 +21,13 @@ module.exports = {
         let mess = await CRUDservice.createNewUser(req.body);
         console.log(mess);
         return res.send('post crud');
+    },
+    displayGetCRUD: async (req, res) => {
+        let data = await CRUDservice.getAllUser();
+        console.log(data);
+        return res.render('displayCRUD.ejs', {
+            users: data
+        })
     }
 }
 
