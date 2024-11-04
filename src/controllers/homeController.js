@@ -48,6 +48,14 @@ module.exports = {
         return res.render('displayCRUD.ejs', {
             users: allUsers
         })
+    },
+    deleteCRUD: async (req, res) => {
+        let id = req.query.id;
+        console.log(id)
+        let allUsers = await CRUDservice.deleteUserById(id);
+        return res.render('displayCRUD.ejs', {
+            users: allUsers
+        })
     }
 }
 

@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import db from '../models/index'
-import { ppid } from 'process';
 
 
 module.exports = {
@@ -64,6 +63,17 @@ module.exports = {
                         where: { id: data.id }
                     }
                 );
+                let allUsers = await db.User.findAll();
+                resolve(allUsers);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    },
+    deleteUserById: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await db.User.destroy({ where: { id: userId } });
                 let allUsers = await db.User.findAll();
                 resolve(allUsers);
             } catch (error) {
