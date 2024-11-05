@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import db from '../models/index'
 
 
@@ -86,12 +86,13 @@ module.exports = {
 
 const hashUserPassword = (password) => {
     return new Promise((resolve, reject) => {
-        try {
-            const salt = crypto.randomBytes(16).toString('hex');  // Tạo salt ngẫu nhiên
-            const derivedKey = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512');  // Hash mật khẩu
-            resolve(derivedKey.toString('hex'));  // Trả về chuỗi hash
-        } catch (error) {
-            reject(error);
-        }
+        const saltRounds = 10; // Số lượng rounds để tạo salt
+
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(hash); // Trả về chuỗi hash
+        });
     });
-}
+};
