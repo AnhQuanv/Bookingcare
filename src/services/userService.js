@@ -1,5 +1,7 @@
-import db from '../models/index'
-import bcrypt from 'bcryptjs';
+require('dotenv').config();
+const db = require('../models/index');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     handleUserLogin: async (email, password) => {
@@ -15,22 +17,67 @@ module.exports = {
                         attributes: ['email', 'roleId', 'password'],
                         raw: true,
                     });
-                    delete user.password
+                    delete user.password;
+                    const payload = {
+                        email,
+                        roleId: user.roleId
+                    }
+                    const access_token = jwt.sign(
+                        payload,
+                        process.env.JWT_SECRET,
+                        {
+                            expiresIn: process.env.JWT_EXPIRE
+                        }
+                    )
                     return {
                         EC: 0,
                         message: "Login successful",
-                        user: user
+                        user: user,
+                        access_token
                     }
                 } else {
-                    return { EC: 1, message: 'The password you entered is incorrect. Please try again.', user: user };
+                    return {
+                        EC: 1,
+                        message: 'The password you entered is incorrect. Please try again.',
+                        user: user
+                    };
 
                 }
             } else {
-                return { EC: 1, message: `Email isn't exist in your system!`, user: user };
+                return {
+                    EC: 1,
+                    message: `Email isn't exist in your system!`,
+                    user: user
+                };
             }
             resolve(userData)
         } catch (error) {
             console.error(error);
+        }
+    },
+
+    getAllUser: async (id) => {
+        try {
+            let users = '';
+            if (id === 'ALL') {
+                users = await db.User.findAll({
+                    attributes: {
+                        exclude: ['password']
+                    }
+                });
+            }
+            if (id && id !== 'ALL') {
+                users = await db.User.findOne({
+                    where: { id },
+                    attributes: {
+                        exclude: ['password']
+                    }
+                })
+            }
+            return users;
+        } catch (error) {
+            console.error(error);
+
         }
     }
 }

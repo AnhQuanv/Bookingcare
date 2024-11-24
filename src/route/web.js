@@ -1,8 +1,11 @@
 import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
+import delay from "../middleware/delay";
+import auth from "../middleware/auth";
 
 let router = express.Router();
+router.all("*", auth);
 let initWebRoutes = (app) => {
     router.get('/', homeController.getHomePage);
     router.get('/crud', homeController.getCRUD);
@@ -17,6 +20,8 @@ let initWebRoutes = (app) => {
     //////////////////////
     router.post('/api/login', userController.handleLogin)
 
+    /////////////////
+    router.get('/api/get-all-users', userController.handleGetAllUser);
 
 
 
