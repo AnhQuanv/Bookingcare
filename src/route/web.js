@@ -5,8 +5,8 @@ import delay from "../middleware/delay";
 import auth from "../middleware/auth";
 
 let router = express.Router();
-router.all("*", auth);
 let initWebRoutes = (app) => {
+    router.all("*", auth);
     router.get('/', homeController.getHomePage);
     router.get('/crud', homeController.getCRUD);
     router.post('/post-crud', homeController.postCRUD);
@@ -19,9 +19,9 @@ let initWebRoutes = (app) => {
 
     //////////////////////
     router.post('/api/login', userController.handleLogin)
-
-    /////////////////
     router.get('/api/get-all-users', userController.handleGetAllUser);
+    router.post('/api/create-new-user', userController.handleCreateNewUser)
+
 
 
 
