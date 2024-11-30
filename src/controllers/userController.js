@@ -108,13 +108,15 @@ module.exports = {
     },
     handleDeleteUser: async (req, res) => {
         try {
-            if (!req.body.id) {
+            const { id } = req.params;
+            console.log(id)
+            if (!id) {
                 return res.status(400).json({
                     EC: 1,
                     message: "Missing required parameter: id",
                 });
             }
-            let message = await userService.deleteUser(req.body.id);
+            let message = await userService.deleteUser(id);
             return res.status(200).json(message);
         } catch (error) {
             console.log(error);
